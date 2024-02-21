@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+    <html> 
+   
+    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+   
+
+    <style>
+                /* CSS for the form */
+                #bookingForm {
+                    display: none; /* Initially hidden */
+                }
+
+                  /* Style for form labels */
+                  label {
+                    font-weight: bold;
+                }
+
+                /* Style for form controls */
+                .form-control {
+                    height: 47px;
+                }
+
+                /* Style for the submit button */
+                .btn-primary {
+                    margin-top: 10px; /* Adjust the top margin as needed */
+                }
+
+                /* CSS for the cross button */
+                .close-button {
+                   
+                    margin-top:-50px;
+                    margin-left:97%;
+                    font-size: 24px;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    z-index: 3; /* Ensure the button is above the form content */
+                }
+            
+                .feedback-label {
+                font-size: 24px; /* Adjust font size as needed */
+                text-align: center;
+                color: #333; /* Adjust text color */
+                font-weight: bold; /* Optional: Add font weight if desired */
+                margin-bottom: 20px; /* Optional: Add margin bottom for spacing */
+                /* Add other styles as desired to make it attractive */
+                }
+
+                .city-rating{
+                margin-right:35px;
+                }
+
+                 /* Style for the star rating */
+                .star-rating {
+                    font-size: 23px;
+                    margin-top:-15px;
+                }
+
+                .star {
+                    color: #ccc;
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                .star::before {
+                    content: '\2605'; /* Unicode character for a star */
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    color: transparent; /* Transparent fill color */
+                    -webkit-text-stroke-width: 2px; /* Border width */
+                    -webkit-text-stroke-color: #f7d917; /* Border color */
+                }
+
+                                
+                /* Style for filled stars */
+                .star.filled-star::before {
+                    color: #f7d917; /* Fill color */
+                }
+
+                .star.active::before {
+                    color: #f7d917; /* Fill color on hover or when active */
+                }
+                
+    </style>
+
+
+    <style>
+                /* CSS for sliding animation */
+                .slide-in {
+                    animation: slideIn 0.5s ease-in-out forwards;
+                }
+                .slide-out {
+                    animation: slideOut 0.5s ease-in-out forwards;
+                }
+                /* Add this CSS to adjust the layout */
+                #flash-message.slide-out {
+                    display: none; /* Hide the flash message when it slides out */
+                }
+
+                #content-container {
+                    transition: transform 0.3s ease; /* Add smooth transition for translateY */
+                }
+
+                @keyframes slideIn {
+                    from {
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes slideOut {
+                    from {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+                }
+    </style>
+
+    <body>
+
+
+                <!-- Flash message box starts -->
+                <div class="col-lg-12" style="height: 0px;">
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages or logged_out %}
+                    <div id="flash-message" class="alert alert-info text-center slide-in">
+                        {% for message in messages %}
+                        <h3>{{ message }}</h3>
+                        {% endfor %}
+                    
+                    </div>
+                    <script>
+                        // JavaScript to hide the flash message after 3 seconds
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const flashMessage = document.getElementById('flash-message');
+                            const contentContainer = document.getElementById('content-container');
+                            if (flashMessage) {
+                                setTimeout(() => {
+                                    flashMessage.classList.remove('slide-in');
+                                    flashMessage.classList.add('slide-out');
+                                    contentContainer.style.transform = 'translateY(0)';
+                                    contentContainer.style.height = 'auto'; // Reset the height
+                                }, 5000); // Hide after 3 seconds (3000 milliseconds)
+                                const flashMessageHeight = flashMessage.clientHeight;
+                                contentContainer.style.transform = 'translateY(' + flashMessageHeight + 'px)';
+                                contentContainer.style.height = 'calc(100% - ' + flashMessageHeight + 'px)';
+                            }
+                        });
+                    </script>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <!-- Flash message box ends -->
+
+                <div id="content-container">   
+                
+                <!-- Topbar Start -->
+                <div class="container-fluid bg-light pt-3 d-none d-lg-block" id="topbar">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                                <div class="d-inline-flex align-items-center">
+                                    <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                                    <p class="text-body px-3">|</p>
+                                    <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 text-center text-lg-right">
+                                <div class="d-inline-flex align-items-center">
+                                    {% if 'username' in session %}
+                                    <!-- Display username when user is logged in -->
+                                    <p class="text-primary px-3 mt-3">{{ session.username }}</p>
+                                    {% endif %}
+
+                                    <a class="text-primary px-3" href="">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a class="text-primary px-3" href="">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a class="text-primary px-3" href="">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a class="text-primary px-3" href="">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                    <a class="text-primary pl-3" href="">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Topbar End -->
+  
+                <!-- Navbar Start -->
+                <div class="container-fluid position-relative nav-bar p-0">
+                    <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+                        <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                            <a href="" class="navbar-brand">
+                                <h1 class="m-0 text-primary"><span class="text-dark">PADHARO MHARE </span>DESH</h1>
+                            </a>
+                            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                                <div class="navbar-nav ml-auto py-0">
+                            <!-- Replace the "Login/Register" link with a button -->
+                            <!--  <button id="login-button" class="nav-item nav-link active btn btn-link" style="cursor: pointer;">Login</button> -->
+                            <div class="col-lg-6 text-center text-lg-right">
+                                <div class="d-inline-flex align-items-center">
+                                
+                                    <button id="logout-button" class="nav-item nav-link active btn btn-link" style="cursor: pointer;">Logout</button>
+                                    
+                                    <button id="login-button" class="nav-item nav-link active btn btn-link" style="cursor: pointer;" data-user-loggedin="{% if 'user_id' in session %}true{% else %}false{% endif %}" onclick="showLoginForm(this.getAttribute('data-user-loggedin'));">Login</button>
+                                    
+                            
+                                    <!-- Add links to social media profiles here -->
+                                </div>
+                            </div>
+
+
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <!-- Navbar End -->
+                
+                <script>
+                    // JavaScript to show the registration form after logout and keep it at its original position
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const registerForm = document.getElementById('register-form');
+                        const topbar = document.getElementById('topbar'); // Get the topbar element
+                        const navbar = document.getElementsByClassName('nav-bar')[0]; // Get the navbar element
+                
+                        // Calculate the top position for the registration form based on the heights of topbar and navbar
+                        const topPosition = topbar.clientHeight + navbar.clientHeight + 100; // Adjust this value as needed
+                
+                        // Adjust the CSS properties for the form
+                        registerForm.style.position = 'absolute'; // Set the position to absolute
+                        registerForm.style.top = `${topPosition}px`; // Set the top position based on the calculated value
+                        registerForm.style.left = '50%'; // Position the form in the center horizontally
+                        registerForm.style.transform = 'translateX(-50%)'; // Center the form precisely horizontally
+                        registerForm.style.zIndex = '9999'; // Set a high z-index to ensure it's displayed over other content
+                
+                        // Check if the user is logged out before displaying the registration form
+                        const userLoggedIn = document.querySelector("#login-button").getAttribute('data-user-loggedin');
+                        if (userLoggedIn === 'false') {
+                            // Show the registration form if the user is logged out
+                            registerForm.style.display = 'block';
+                        } else {
+                            // Hide the registration form if the user is logged in
+                            registerForm.style.display = 'none';
+                        }
+                    });
+                </script>
+
+                <!-- Section: Design Block -->
+                <section class="background-radial-gradient overflow-hidden">
+                    <style>
+                        .bg-glass {
+                            background-color: hsla(0, 0%, 100%, 0.9) !important;
+                            backdrop-filter: saturate(200%) blur(25px);
+                        }
+                        #register-form{
+                            width: 460px;
+                            margin: auto; /* Center the form horizontally and add top margin */
+                            display: none;
+                            position: fixed; /* Set the form's position to fixed */
+                            top: 50%; /* Position the form in the center vertically */
+                            left: 50%; /* Position the form in the center horizontally */
+                            transform: translate(-50%, -50%); /* Center the form precisely */
+                            z-index: 9999; /* Set a high z-index to ensure it's displayed over other content */
+                        }
+                        /* Add custom styles for the login/register form */
+                        #login-form{
+                            max-width: 450px;
+                            margin-top: 50px;
+                            display: none;
+                            position: fixed; /* Set the form's position to fixed */
+                            top: 50%; /* Position the form in the center vertically */
+                            left: 50%; /* Position the form in the center horizontally */
+                            transform: translate(-50%, -50%); /* Center the form precisely */
+                            z-index: 9999; /* Set a high z-index to ensure it's displayed over other content */
+                        }
+                        /* Custom CSS to reduce padding for the card-body */
+                        .card-body-custom {
+                                padding-left: 10px; /* Adjust the padding as needed */
+                                padding-right: 10px;
+                            }
+                        
+                    </style>
+
+                    <div class="container">
+
+                        <!-- Add this snippet to conditionally display the login form and keep it at its original position -->
+                        {% if registered or logged_out %}
+                        <script>
+                            // JavaScript to show the login form after registration and keep it at its original position
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const loginForm = document.getElementById('login-form');
+                                const registerForm = document.getElementById('register-form');
+                                const carousel = document.getElementById('header-carousel'); // Get the carousel element
+
+                                loginForm.style.display = 'block'; // Show the login form
+                                registerForm.style.display = 'none'; // Hide the registration form
+
+                                // Set the login form's position to be above the carousel
+                                loginForm.style.position = 'absolute'; // Set the position to absolute
+                                loginForm.style.top = '16%'; // Position the form in the center vertically
+                                loginForm.style.left = '50%'; // Position the form in the center horizontally
+                                loginForm.style.transform = 'translate(-50%, -50%)'; // Center the form precisely
+                                loginForm.style.zIndex = '999'; // Set a high z-index to ensure it's displayed over other content
+
+                                // Adjust the carousel's z-index to be lower than the login form
+                                carousel.style.zIndex = '1';
+                            });
+                        </script>
+                        {% endif %}
+
+                        <div id="login-form" class="card bg-glass">
+                            <div class="card-body px-4 py-5 px-md-5">
+                                <button class="close-button" id="closeButton" onclick="closeLoginForm()">X</button>
+                                <form action="/login" method="POST">
+                                    <!-- Change the action attribute as needed -->
+                                    <h2 class="text-center mb-4">Login</h2>
+                                    <div class="mb-4">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" id="username" name="username" class="form-control" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" id="password" name="password" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                    <p class="mt-3">Don't have an account? <a href="#" id="register-button">Register here</a></p>
+                                    <p class="mt-3">Forgot your password? <a href="#" id="forgot-password-button" onclick="forgotPassword()">Reset here</a></p>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="register-form" class="card bg-glass">
+                            <div class="card-body px-5 py-5 px-md-5 card-body-custom">
+                            <button class="close-button" id="closeButton" onclick="closeRegistrationForm()">X</button>
+                                <form action="/register" method="POST">
+                                    <!-- Change the action attribute as needed -->
+                                    <h2 class="text-center mb-4">Register</h2>
+                                    <div class="mb-4">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" id="username" name="username" class="form-control" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" id="password" name="password" class="form-control" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="email" class="form-label">E-mail id</label>
+                                        <input type="text" id="email" name="email" class="form-control" required>
+                                    </div>
+                                    <button id="registersubmit-button" class="btn btn-primary btn-block">Register</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section: Design Block -->
+
+                <!--Password reset container style starts -->
+                <style>
+                    
+                    .card-body-custom {
+                        padding-left: 10px;
+                        padding-right: 10px;
+                    }
+                
+                    #password-reset-container {
+                        background-color: hsla(0, 0%, 100%, 0.9) !important;
+                        backdrop-filter: saturate(200%) blur(25px);
+                        width: 460px;
+                        margin: auto;
+                        padding:20px;
+                        display: none;
+                        position: fixed;
+                        top:25%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        z-index: 9999;
+                    }
+                    
+                    #password-reset-form{
+                        width: 410px;
+                    }
+                    
+                    #update-password-container {
+                        display: none;
+                        text-align: center;
+                        margin: auto;
+                        padding: 20px;
+                        width: 460px;
+                    }
+
+                    #update-password-form input {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    #update-password-form button {
+                        width: 50%;
+                        margin: 0 auto;
+                    }
+                </style>
+                <!--Password reset container style ends-->
+
+                <!--Password reset container starts -->
+                <div id="password-reset-container" style="display: none; text-align: center;">
+                    <button class="close-button" id="closeResetButton" onclick="closeResetContainer()">X</button>
+                    <form id="password-reset-form" action="/send-otp" method="POST">
+                        <h2 class="text-center mb-4">Reset Password</h2>
+                        <div class="mb-4">
+                            <label for="reset-email" class="form-label">Email</label>
+                            <input type="email" id="reset-email" name="reset-email" class="form-control" required>
+                        </div>
+                        <button type="button" onclick="sendOTP()" class="btn btn-primary btn-block" style="width: 50%; margin: 0 auto;">Send OTP</button>
+                        <div id="otp-container" style="display: none; margin-top:10px;">
+                            <div class="mb-4">
+                                <label for="otp" class="form-label">Enter OTP</label>
+                                <input type="text" id="otp" name="otp" class="form-control" required>
+                            </div>
+                            <button type="button" onclick="verifyOTP()" class="btn btn-primary btn-block" style="width: 50%; margin: 0 auto;">Verify OTP</button>
+                        </div>
+                    </form>
+                </div>
+                <!--Password reset container ends-->
+
+                <!-- Update Password Form starts -->
+                <style>
+                    .card-body-custom {
+                        padding-left: 10px;
+                        padding-right: 10px;
+                    }
+
+                    #update-password-container {
+                        background-color: hsla(0, 0%, 100%, 0.9) !important;
+                        backdrop-filter: saturate(200%) blur(25px);
+                        width: 460px;
+                        margin: auto;
+                        padding: 20px;
+                        display: none;
+                        position: fixed;
+                        top:25%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        z-index: 9999;
+                    }
+
+                    #update-password-form {
+                        width: 410px;
+                    }
+
+                    #update-password-container {
+                        display: none;
+                        text-align: center;
+                        margin: auto;
+                        padding: 20px;
+                        width: 460px;
+                    }
+
+                    #update-password-form input {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    #update-password-form button {
+                        width: 50%;
+                        margin: 0 auto;
+                    }
+                </style>
+                <!-- Update Password Form ends -->
+
+                <!-- Update Password Form starts-->
+                <div id="update-password-container" style="display: none;">
+                    <form id="update-password-form" action="/update-password" method="POST">
+                        <h2 class="text-center mb-4">Update Password</h2>
+                        <div class="mb-4">
+                            <label for="new-password" class="form-label">New Password</label>
+                            <input type="password" id="new-password" name="new-password" class="form-control" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="confirm-password" class="form-label">Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+                        </div>
+                        <button type="button" onclick="updatePassword()" class="btn btn-primary btn-block" style="width: 50%; margin: 0 auto;">Update Password</button>
+                    </form>
+                </div>
+                <!-- Update Password Form ends-->
+
+                <script>
+                    
+                    
+                    var storedOTP; // Global variable to store the generated OTP
+
+                    function forgotPassword() {
+                        const resetContainer = document.getElementById('password-reset-container');
+                        const loginForm = document.getElementById('login-form');
+                        resetContainer.style.display = 'block';
+                        loginForm.style.display = 'none';
+                    }
+
+                    function closeResetContainer() {
+                        const resetContainer = document.getElementById('password-reset-container');
+                        resetContainer.style.display = 'none';
+                    }
+
+                    function sendOTP() {
+                        
+                        const email = document.getElementById('reset-email').value;
+                        if (!validateEmail(email)) {
+                            const flashMessage = document.getElementById('flash-message');
+                        alert("Please enter a valid email address.");
+                        
+                            return;
+                        }
+                        storedOTP = generateOTP(); // Store the generated OTP in the global variable
+                        // Simulate sending the OTP to the email (for testing purposes)
+                        alert("Generated OTP: " + storedOTP);
+                        const otpcontainer = document.getElementById('otp-container');
+                        otpcontainer.style.display = 'block';
+                        // Add your logic here to send the OTP after verifying the email in the database
+                        // You can use AJAX to send a request to the server and handle the response accordingly
+                        // Modify this function as needed to fit your application's requirements
+                    }
+
+                    function generateOTP() {
+                        return Math.floor(100000 + Math.random() * 900000);
+                    }
+
+                    function validateEmail(email) {
+                        const re = /\S+@\S+\.\S+/;
+                        return re.test(email);
+                    }
+
+                    function verifyOTP() {
+                    const enteredOTP = document.getElementById('otp').value;
+                    const email = document.getElementById('reset-email').value; // Retrieve the entered email
+                    // Compare the entered OTP with the stored OTP and redirect if they match
+                    // Modify this function to fit your application's requirements
+                    const generatedOTP = storedOTP; // Use the stored OTP for comparison
+
+                    if (enteredOTP === generatedOTP.toString()) {
+                        // Assuming the email exists in the database
+                        if (checkEmailInDatabase(email)) {
+                            openUpdatePasswordForm();
+                        } else {
+                            alert("Email not found in the database. Please try again.");
+                        }
+                    } else {
+                        alert("OTP verification failed. Please try again.");
+                    }
+                }
+
+                    function checkEmailInDatabase(email) {
+                        // Add your logic to check if the email exists in your database
+                        // Replace this with your backend logic for checking the email
+                        // Return true if the email is found, otherwise return false
+                        return true; // Replace this with the actual logic
+                    }
+
+                    function openUpdatePasswordForm() {
+                        const updatePasswordContainer = document.getElementById('update-password-container');
+                        updatePasswordContainer.style.display = 'block'; // Display the password update form
+                        const resetContainer = document.getElementById('password-reset-container');
+                        resetContainer.style.display = 'none'; // Hide the password reset container
+                    }
+
+                    function updatePassword() {
+                        const newPassword = document.getElementById('new-password').value;
+                        const confirmPassword = document.getElementById('confirm-password').value;
+
+                        if (newPassword === confirmPassword) {
+                            const email = document.getElementById('reset-email').value; // Retrieve the entered email
+                            const xhr = new XMLHttpRequest();
+                            const url = '/update-password';
+                            const params = 'email=' + email + '&password=' + newPassword;
+                            xhr.open('POST', url, true);
+                            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            xhr.onload = function () {
+                                if (xhr.status === 200) {
+                                    alert('Password updated successfully!');
+                                    const updatePasswordContainer = document.getElementById('update-password-container');
+                                    updatePasswordContainer.style.display = 'none'; // Display the password update form
+                                } else {
+                                    alert('Error updating password. Please try again.');
+                                    const updatePasswordContainer = document.getElementById('update-password-container');
+                                    updatePasswordContainer.style.display = 'block'; // Display the password update form
+                                }
+                            };
+                            xhr.send(params);
+                        } else {
+                            alert('New and confirm passwords do not match. Please try again.');
+                        }
+                    }
+
+                
+
+                </script>
+                    
+                <!-- Carousel Start -->
+                <div class="container-fluid p-0">
+                    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="w-100" src="{{ url_for('static', filename='img/carousel-1.1.jpg') }}" alt="Image">
+                                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                    <div class="p-3" style="max-width: 900px;">
+                                        <h4 class="text-white text-uppercase mb-md-3">Tours & Travel</h4>
+                                        <h1 class="display-3 text-white mb-md-4">Let's Discover The World Together</h1>
+                                        <a href="/add-homestay" class="btn btn-primary py-md-3 px-md-5 mt-2">Add a homestay</a>
+                                        <a href="/add-guide" class="btn btn-primary py-md-3 px-md-5 mt-2">Add a guide</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img class="w-100" src="{{ url_for('static', filename='img/carousel-2.jpg') }}" alt="Image">
+                                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                                    <div class="p-3" style="max-width: 900px;">
+                                        <h4 class="text-white text-uppercase mb-md-3">Tours & Travel</h4>
+                                        <h1 class="display-3 text-white mb-md-4">Discover Amazing Places With Us</h1>     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+                            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                                <span class="carousel-control-prev-icon mb-n2"></span>
+                            </div>
+                        </a>
+                        <a class="carousel-control-next" href="#header-carousel" data-slide="next">
+                            <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                                <span class="carousel-control-next-icon mb-n2"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- Carousel End -->
+
+                <!-- Booking Start -->
+                <div class="container-fluid booking mt-2 pb-2">
+                    <div class="container pb-4">
+                        <div class="bg-light shadow d-flex flex-column align-items-center" style="padding: 20px;">
+                        
+                                <p style="font-size: 35px; font-weight: bold">Explore Cities of Interest</p>
+                                <button id="showFormButton" class="btn btn-info">Click Here</button>
+                        
+                            
+                            <div id="bookingForm" class="hidden">
+                                <div class="form-container">
+                                    <button id="closeFormButton" class="close-button">×</button><br>
+                                    <!--  <form method="POST" action="/submit" class="needs-validation" novalidate>--> 
+                                    <form method="POST" action="/submit-bform">
+                                    <!-- <label for="city">Enter a city:</label>
+                                        <input type="text" id="city" name="city" required>
+                                        <input type="submit" value="Search">  --> 
+                                    <div class="form-row">
+                                        <!-- Column 1 -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">Your Name:</label>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Your Name" autocomplete="name"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Your Email:</label>
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" autocomplete="email"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="country">Coming From Country:</label>
+                                                <select class="custom-select" id="country" name="country" autocomplete="country">
+                                                    <option value="" selected disabled>Select Country</option>
+                                                    <option value="" selected disabled>India</option>
+                                                    <option value="" selected disabled>Australia</option>             
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">Your Phone with ISD Code:</label>
+                                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Your Phone with ISD Code" autocomplete="phone" />
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                        <!-- Column 2 -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <div class="col-md-4">
+                                                        <label for="arrivalDate">Arrival Date:</label>
+                                                        <input type="text" class="form-control" id="arrivalDate" name="arrivalDate" placeholder="Date">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="arrivalMonth">Month:</label>
+                                                        <input type="text" class="form-control" id="arrivalMonth" name="arrivalMonth" placeholder="Month">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="arrivalYear">Year:</label>
+                                                        <input type="text" class="form-control" id="arrivalYear" name="arrivalYear" placeholder="Year">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="tourDuration">Tour Duration (Days):</label>
+                                                <input type="number" class="form-control" id="tourDuration" name="tourDuration" placeholder="Tour Duration">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="adults">Number of Adults:</label>
+                                                <input type="number" class="form-control" id="adults" name="adults" placeholder="Adults">
+                                                
+                                                <label for="children">Number of Children:</label>
+                                                <input type="number" class="form-control" id="children" name="children" placeholder="Children">
+                                                
+                                            </div>
+                                        
+                                        </div>
+
+                                    <!-- Interest -->
+                                        <div class="form-group">
+                                            <label class="normal-label">Interested Activities:</label>
+                                            <div class="activity-options">
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Adventures" name="activities[]" value="Adventures">
+                                                    <label for="Adventures" class="form-check-label normal-label">Adventures</label>
+                                                </div>
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Resorts" name="activities[]" value="Resorts">
+                                                    <label for="Resorts" class="form-check-label normal-label">Resorts</label>
+                                                </div>
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Fairs" name="activities[]" value="Fairs">
+                                                    <label for="Fairs" class="form-check-label normal-label">Fairs</label>
+                                                </div>
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Lakes" name="activities[]" value="Lakes">
+                                                    <label for="Lakes" class="form-check-label normal-label">Lakes</label>
+                                                </div>
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Forts" name="activities[]" value="Forts">
+                                                    <label for="Forts" class="form-check-label normal-label">Forts</label>
+                                                </div>
+                                                <div class="form-check-inline" style="margin-right: 10px;">
+                                                    <input class="form-check-input" type="checkbox" id="Temples" name="activities[]" value="Temples">
+                                                    <label for="Temples" class="form-check-label normal-label">Temples</label>
+                                                </div>
+                                                <div class="form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="NationalParks" name="activities[]" value="National parks">
+                                                    <label for="NationalParks" class="form-check-label normal-label">National Parks</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-center">
+                                        <button id="submitButton" class="btn btn-primary" type="submit">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    <div class="overlay" id="formOverlay"></div>
+                    </div>
+                    </div>
+                </div>
+                <!-- Booking End -->
+   
+                <!-- About Start -->
+                <div class="container-fluid py-5">
+                    <div class="container pt-3">
+                        <div class="row">
+                            <div class="col-lg-6" style="min-height: 500px;">
+                                <div class="position-relative h-100">
+                                    <img class="position-absolute w-100 h-100" src="{{ url_for('static', filename='img/about-10.jpg') }}" style="object-fit: cover;">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 pt-5 pb-lg-5">
+                                <div class="about-text bg-white p-4 p-lg-5 my-lg-5">
+                                    <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">About Us</h6>
+                                    <h1 class="mb-3">We Provide Best Tour Packages In Your Budget</h1>
+                                    <p>Dolores lorem lorem ipsum sit et ipsum. Sadip sea amet diam dolore sed et. Sit rebum labore sit sit ut vero no sit. Et elitr stet dolor sed sit et sed ipsum et kasd ut. Erat duo eos et erat sed diam duo</p>
+                                    <div class="row mb-4">
+                                        <div class="col-6">
+                                            <img class="img-fluid" src="{{ url_for('static', filename='img/about-11.jpg') }}" >
+                                        </div>
+                                        <div class="col-6">
+                                            <img class="img-fluid" src="{{ url_for('static', filename='img/about-9.jpg') }}" >
+                                        </div>
+                                    </div>
+                                    <a href="" class="btn btn-primary mt-1">Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- About End -->
+
+                <!-- Feature Start -->
+                <div class="container-fluid pb-5">
+                    <div class="container pb-5">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="d-flex mb-4 mb-lg-0">
+                                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                                        <i class="fa fa-2x fa-money-check-alt text-white"></i>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <h5 class="">Competitive Pricing</h5>
+                                        <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex mb-4 mb-lg-0">
+                                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                                        <i class="fa fa-2x fa-award text-white"></i>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <h5 class="">Best Services</h5>
+                                        <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex mb-4 mb-lg-0">
+                                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-primary mr-3" style="height: 100px; width: 100px;">
+                                        <i class="fa fa-2x fa-globe text-white"></i>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <h5 class="">Worldwide Coverage</h5>
+                                        <p class="m-0">Magna sit magna dolor duo dolor labore rebum amet elitr est diam sea</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Feature End -->
+
+
+                <!--Feedback  not used
+
+                    <div class="container-fluid booking mt-2 pb-2">
+                        <div class="container pb-4">
+                            <div class="bg-light shadow d-flex " style="padding: 20px;">
+                                <div class="feedback-custom-container">
+                                    <div class="form-group">
+                                        <label class="feedback-label">Give your feedback</label>
+                                        <div class="city-ratings d-flex flex-wrap">
+                                            <div class="city-rating">
+                                                <p>Ajmer</p>
+                                                <div class="star-rating" data-city="Ajmer">
+                                                    <span class="star" data-rating="1">☆</span>
+                                                    <span class="star" data-rating="2">☆</span>
+                                                    <span class="star" data-rating="3">☆</span>
+                                                    <span class="star" data-rating="4">☆</span>
+                                                    <span class="star" data-rating="5">☆</span>
+                                                </div>
+                                            </div>
+                                            <div class="city-rating"> 
+                                                <p>Bharatpur</p>
+                                                <div class="star-rating" data-city="Bharatpur">
+                                                    <span class="star" data-rating="1">☆</span>
+                                                    <span class="star" data-rating="2">☆</span>
+                                                    <span class="star" data-rating="3">☆</span>
+                                                    <span class="star" data-rating="4">☆</span>
+                                                    <span class="star" data-rating="5">☆</span>
+                                                </div>
+                                            </div>
+                                            <div class="city-rating"> 
+                                                <p>Bikaner</p>
+                                                <div class="star-rating" data-city="Bikaner">
+                                                    <span class="star" data-rating="1">☆</span>
+                                                    <span class="star" data-rating="2">☆</span>
+                                                    <span class="star" data-rating="3">☆</span>
+                                                    <span class="star" data-rating="4">☆</span>
+                                                    <span class="star" data-rating="5">☆</span>
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    Feedback not used End    -->
+                            
+                        
+                <!-- Feedback -->
+                <div class="container-fluid booking mt-2 pb-2">
+                    <div class="container pb-4">
+                        <div class="bg-light shadow d-flex " style="padding: 20px;">
+                            <div class="feedback-custom-container">
+                                <form action="/submit-feedback" method="post">
+                                    <label class="feedback-label">Give your feedback</label>
+                                    <div class="city-ratings d-flex flex-wrap">
+                                        <div class="city-rating">
+                                            <p>Ajmer</p>
+                                            <div class="star-rating" data-city="Ajmer">
+                                                <span class="star" data-rating="1">☆</span>
+                                                <span class="star" data-rating="2">☆</span>
+                                                <span class="star" data-rating="3">☆</span>
+                                                <span class="star" data-rating="4">☆</span>
+                                                <span class="star" data-rating="5">☆</span>
+                                            </div>
+                                            <input type="hidden" name="city[]" value="Ajmer">
+                                            <input type="hidden" name="rating[]" class="rating" value="1">
+                                        </div>
+                                        <!-- Add more city ratings here -->
+                                        <div class="city-rating">
+                                            <p>Bharatpur</p>
+                                            <div class="star-rating" data-city="Bharatpur">
+                                                <span class="star" data-rating="1">☆</span>
+                                                <span class="star" data-rating="2">☆</span>
+                                                <span class="star" data-rating="3">☆</span>
+                                                <span class="star" data-rating="4">☆</span>
+                                                <span class="star" data-rating="5">☆</span>
+                                            </div>
+                                            <input type="hidden" name="city[]" value="Bharatpur">
+                                            <input type="hidden" name="rating[]" class="rating" value="1">
+                                        </div>
+
+                                        <!-- Add more city ratings here -->
+                                        <div class="city-rating">
+                                            <p>Bikaner</p>
+                                            <div class="star-rating" data-city="Bikaner">
+                                                <span class="star" data-rating="1">☆</span>
+                                                <span class="star" data-rating="2">☆</span>
+                                                <span class="star" data-rating="3">☆</span>
+                                                <span class="star" data-rating="4">☆</span>
+                                                <span class="star" data-rating="5">☆</span>
+                                            </div>
+                                            <input type="hidden" name="city[]" value="Bikaner">
+                                            <input type="hidden" name="rating[]" class="rating" value="1">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="user_id" value="{{ user_id }}">
+                                    <button type="submit-feedback" class="btn btn-primary">Submit Feedback</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+                <!-- Feedback End -->
+
+            
+                <div id="user-data" data-user-id="{{ user_id|default('null') }}"></div>
+                
+                </div>
+
+    </body>
+
+    </html>
+
+    <!-- JavaScript to handle star ratings and display a Thank You message -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedbackForm = document.getElementById('feedback-form');
+            const thankYouMessage = document.getElementById('thank-you-message');
+            
+            // Function to handle star clicks
+            function handleStarClick(event) {
+                const selectedRating = event.target.getAttribute('data-rating');
+                const stars = event.currentTarget.querySelectorAll('.star');
+                
+                stars.forEach(star => {
+                    const rating = star.getAttribute('data-rating');
+                    if (rating <= selectedRating) {
+                        star.classList.add('filled-star');
+                    } else {
+                        star.classList.remove('filled-star');
+                    }
+                });
+                
+                // Update the hidden input field with the selected rating
+                const ratingInput = event.currentTarget.parentElement.querySelector('.rating');
+                if (ratingInput) {
+                    ratingInput.value = selectedRating;
+                }
+            }
+
+            // Function to handle form submission
+            function submitForm() {
+                const formData = new FormData(feedbackForm);
+
+                fetch('/submit-feedback', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide the feedback form and show the Thank You message
+                    feedbackForm.style.display = 'none';
+                    thankYouMessage.style.display = 'block';
+                })
+                .catch(error => {
+                    // Handle errors if needed
+                    console.error('Error:', error);
+                });
+            }
+
+            // Attach click event listeners to star ratings
+            const starContainers = document.querySelectorAll('.star-rating');
+            starContainers.forEach(starContainer => {
+                starContainer.addEventListener('click', handleStarClick);
+            });
+
+            // Attach a click event listener to the submit button
+            const submitButton = document.getElementById('submit-feedback');
+            submitButton.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default form submission
+                submitForm(); // Handle the form submission
+            });
+        });
+    </script>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const showFormButton = document.getElementById('showFormButton');
+        const bookingForm = document.getElementById('bookingForm');
+        const closeFormButton = document.getElementById('closeFormButton');
+        const formOverlay = document.getElementById('formOverlay');
+        const header = document.getElementsByClassName('header-container');
+
+        // Function to show the booking form and hide other elements
+        function showBookingForm() {
+            // Hide the "Click Here" button and other elements you want to hide
+            showFormButton.style.display = 'none';
+            // Show the form and overlay
+            bookingForm.style.display = 'block';
+            formOverlay.style.display = 'block';
+        }
+
+        // Function to close the booking form and show the "Click Here" button
+        function closeBookingForm() {
+            // Show the "Click Here" button and other elements you want to show
+            showFormButton.style.display = 'block';
+            // Hide the form and overlay
+            bookingForm.style.display = 'none';
+            formOverlay.style.display = 'none';
+        }
+        // Add click event listener to show the form
+        showFormButton.addEventListener('click', showBookingForm);
+
+        // Add click event listener to close the form
+        closeFormButton.addEventListener('click', closeBookingForm);
+    });
+    </script>
+
+    <script>
+    // Function to notify the server when the tab is being closed
+    window.addEventListener('beforeunload', function (e) {
+        // Check if the user is logged in
+        const userDataElement = document.getElementById('user-data');
+        const user_id = userDataElement.getAttribute('data-user-id');
+
+        if (user_id !== 'null') {
+            // If the user is logged in, use an asynchronous fetch request to log them out
+            fetch('/logout-on-tab-close', {
+                method: 'GET'
+            });
+        }
+    });
+    </script>
+
+
+    <script>
+    // JavaScript to toggle the visibility of the forms
+    const loginButton = document.getElementById('login-button');
+    const loginForm = document.getElementById('login-form');
+    const registerButton = document.getElementById('register-button');
+    const registerForm = document.getElementById('register-form');
+    const logoutButton = document.getElementById('logout-button');
+    const flashMessage = document.getElementById('flash-message');
+
+    // Function to show the login form and hide the registration form
+    function showLoginForm(userLoggedIn) {
+        if (userLoggedIn === 'false') {
+            // Code to open the login form
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            flashMessage.style.display = 'none'; // Hide the flash message when the forms are displayed
+        } else {
+            // User is already logged in, display a message box
+            displayMessage("Please logout to access the login form.");
+        }
+    }
+
+
+    function closeLoginForm() {
+            const loginForm = document.getElementById('login-form');
+            loginForm.style.display = 'none'; // Hide the login form
+        }
+
+
+    // Function to display a message in the flash message box
+    function displayMessage(message) {
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.innerHTML = '<h3>' + message + '</h3>';
+            flashMessage.style.display = 'block';
+        }
+    }
+
+
+    // Function to show the registration form and hide the login form
+    function showRegisterForm() {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        flashMessage.style.display = 'none'; // Hide the flash message when the forms are displayed
+    }
+
+
+    function closeRegistrationForm() {
+            const loginForm = document.getElementById('register-form');
+            loginForm.style.display = 'none'; // Hide the login form
+        }
+
+    // Function to hide the flash message
+    function hideFlashMessage() {
+        flashMessage.style.display = 'none';
+    }
+
+    loginButton.addEventListener('click', () => {
+        const userLoggedIn = loginButton.getAttribute('data-user-loggedin');
+        if (userLoggedIn === 'true' ) {
+        
+        } else {
+            // User is not logged in, show the login form
+            showLoginForm(userLoggedIn);
+            hideFlashMessage();
+        }
+    });
+
+    registerButton.addEventListener('click', () => {
+        showRegisterForm();
+        hideFlashMessage();
+    });
+
+    // Add an event listener to prevent hiding the forms when interacting with their contents
+    [loginForm, registerForm].forEach((form) => {
+        form.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the click event from reaching the document click listener
+        });
+    });
+
+    // Add an event listener to close the forms when clicking anywhere outside them
+    document.addEventListener('click', (e) => {
+        if (
+            e.target !== loginForm &&
+            e.target !== loginButton &&
+            e.target !== registerForm &&
+            e.target !== registerButton
+        ) {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+        }
+    });
+
+    // Add an event listener for the logout button
+    logoutButton.addEventListener('click', () => {
+        window.location.href = '/logout'; // Redirect to the /logout route
+    });
+
+
+    </script>
+
+    <script>
+        // JavaScript to hide the flash message
+        function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            const contentContainer = document.getElementById('content-container');
+            if (flashMessage) {
+                flashMessage.classList.remove('slide-in');
+                flashMessage.classList.add('slide-out');
+                contentContainer.style.transform = 'translateY(0)';
+                contentContainer.style.height = 'auto'; // Reset the height
+            }
+        }
+
+        // Function to check if flash message is present and hide it after 3 seconds
+        function checkAndHideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                setTimeout(hideFlashMessage, 3000); // Hide after 3 seconds (3000 milliseconds)
+                const flashMessageHeight = flashMessage.clientHeight;
+                const contentContainer = document.getElementById('content-container');
+                contentContainer.style.transform = 'translateY(' + flashMessageHeight + 'px)';
+                contentContainer.style.height = 'calc(100% - ' + flashMessageHeight + 'px)';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkAndHideFlashMessage);
+
+
+
+        
+    </script>
+

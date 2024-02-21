@@ -1,0 +1,109 @@
+
+
+        /* CSS for the form */
+        #bookingForm {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: none;
+            max-width: 600px; /* Adjust the maximum width as needed */
+            width: 100%;
+            display: none; /* Initially hidden */
+        }
+
+        /* Style for form labels */
+        label {
+            font-weight: bold;
+        }
+
+        /* Style for form controls */
+        .form-control {
+            height: 47px;
+        }
+
+        /* Style for the submit button */
+        .btn-primary {
+            margin-top: 10px; /* Adjust the top margin as needed */
+        }
+
+
+        /* CSS for the cross button */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            margin-bottom:40px;
+            font-size: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1; /* Ensure the button is above the form content */
+        }
+
+        /* CSS for the overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Initially hidden */
+            pointer-events: none; /* Add this line to make the overlay not intercept mouse events */
+        }
+
+        /* CSS for the blurred background when the form is open */
+        .overlay.active {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            pointer-events: auto; /* Add this line to allow mouse events when the overlay is active */
+        }
+
+
+         
+        .feedback-label {
+        font-size: 24px; /* Adjust font size as needed */
+        text-align: center;
+        color: #333; /* Adjust text color */
+        font-weight: bold; /* Optional: Add font weight if desired */
+        margin-bottom: 20px; /* Optional: Add margin bottom for spacing */
+        /* Add other styles as desired to make it attractive */
+        }
+
+        .city-rating{
+        margin-right:35px;
+        }
+
+         /* Style for the star rating */
+        .star-rating {
+            font-size: 23px;
+            margin-top:-15px;
+        }
+
+        .star {
+            color: #ccc;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .star::before {
+            content: '\2605'; /* Unicode character for a star */
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: transparent; /* Transparent fill color */
+            -webkit-text-stroke-width: 2px; /* Border width */
+            -webkit-text-stroke-color: #f7d917; /* Border color */
+        }
+
+        .star:hover::before,
+        .star.active::before {
+            color: #f7d917; /* Fill color on hover or when active */
+        }
