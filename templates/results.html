@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>PMD | HOME</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Free HTML Templates" name="keywords">
+        <meta content="Free HTML Templates" name="description">
+    
+        <!-- Favicon -->
+        <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
+    
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+    
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    
+        <!-- Libraries Stylesheet -->
+        <link href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
+    
+        <!-- Customized Bootstrap Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+       <style>
+                /* CSS for the form */
+                #bookingForm {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: #fff;
+                    padding: 20px;
+                    box-shadow: none;
+                    max-width: 600px; /* Adjust the maximum width as needed */
+                    width: 100%;
+                    display: none; /* Initially hidden */
+                }
+
+                /* Style for form labels */
+                label {
+                    font-weight: bold;
+                }
+
+                /* Style for form controls */
+                .form-control {
+                    height: 47px;
+                }
+
+                /* Style for the submit button */
+                .btn-primary {
+                    margin-top: 10px; /* Adjust the top margin as needed */
+                }
+
+
+                /* CSS for the cross button */
+                .close-button {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    margin-bottom:40px;
+                    font-size: 24px;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    z-index: 1; /* Ensure the button is above the form content */
+                }
+
+                /* CSS for the overlay */
+                .overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: none; /* Initially hidden */
+                    pointer-events: none; /* Add this line to make the overlay not intercept mouse events */
+                }
+
+                /* CSS for the blurred background when the form is open */
+                .overlay.active {
+                    display: block;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 999;
+                    pointer-events: auto; /* Add this line to allow mouse events when the overlay is active */
+                }
+
+
+                 
+                .feedback-label {
+                font-size: 24px; /* Adjust font size as needed */
+                text-align: center;
+                color: #333; /* Adjust text color */
+                font-weight: bold; /* Optional: Add font weight if desired */
+                margin-bottom: 20px; /* Optional: Add margin bottom for spacing */
+                /* Add other styles as desired to make it attractive */
+                }
+
+                .city-rating{
+                margin-right:35px;
+                }
+
+                 /* Style for the star rating */
+                .star-rating {
+                    font-size: 23px;
+                    margin-top:-15px;
+                }
+
+                .star {
+                    color: #ccc;
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                .star::before {
+                    content: '\2605'; /* Unicode character for a star */
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    color: transparent; /* Transparent fill color */
+                    -webkit-text-stroke-width: 2px; /* Border width */
+                    -webkit-text-stroke-color: #f7d917; /* Border color */
+                }
+
+                .star:hover::before,
+                .star.active::before {
+                    color: #f7d917; /* Fill color on hover or when active */
+                }
+       </style> 
+    </head>
+    
+    <body>
+
+          <!-- Topbar Start -->
+          <div class="container-fluid bg-light pt-3 d-none d-lg-block">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                        <div class="d-inline-flex align-items-center">
+                            <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                            <p class="text-body px-3">|</p>
+                            <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center text-lg-right">
+                        <div class="d-inline-flex align-items-center">
+                            {% if username %}
+                            <!-- Display username when user is logged in -->
+                            <p class="text-primary px-3 mt-3">{{ username }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="d-inline-flex align-items-center">
+                            <a class="text-primary px-3" href="">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a class="text-primary px-3" href="">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a class="text-primary px-3" href="">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a class="text-primary px-3" href="">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a class="text-primary pl-3" href="">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- Topbar End -->
+    
+    
+    
+            
+            <!-- Navbar Start -->
+            <div class="container-fluid position-relative nav-bar p-0">
+                <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+                    <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                        <a href="" class="navbar-brand">
+                            <h1 class="m-0 text-primary"><span class="text-dark">PADHARO MHARE </span>DESH</h1>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                            <div class="navbar-nav ml-auto py-0">
+                               <a href="/add-home" class="text-primary px-3 mt-2">Home</a>
+                    
+                        <div class="col-lg-6 text-center text-lg-right">
+                            <div class="d-inline-flex align-items-center">
+                            
+    
+                                <!-- Add links to social media profiles here -->
+                            </div>
+                        </div>
+    
+    
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- Navbar End -->
+       
+
+
+        <!-- Destination Start -->
+        
+            <div class="container pt-5 pb-3">
+                <div class="text-center mb-3 pb-3">
+                    <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Destination</h6>
+                    <h1>Explore Top Destination</h1>
+                </div>
+                <div class="row">
+                    {% for entry in data %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="destination-item position-relative overflow-hidden mb-2" style="height: 300px;">
+                            <img class="img-fluid" src="{{ entry['ImageURL'] }}" alt="Image for {{ entry['Interest'] }}" style="width: 100%; height: 100%;">
+                            <a class="destination-overlay text-white text-decoration-none" href="">
+                                <h3 class="text-white">{{ entry['Interest'] }}</h3>
+                                <h5 class="text-white">{{ entry['City'] }}</h5>
+                                <span>{{ entry['Place'] }}</span>                                  
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+       
+        <!-- Destination End -->
+
+
+
+        <!-- Recommended Cities -->
+      
+            <div class="container pt-5 pb-3">
+                <div class="text-center mb-3 pb-3">
+                    <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Recommended Cities</h6>
+                    <h2>Explore Top Recommended Cities</h2>
+                </div>
+                <div class="row">
+                    {% if top_cities %}
+                        {% for city in top_cities %}
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="destination-item position-relative overflow-hidden mb-2" style="height: 300px;">
+                                    <!-- Display the image URL for each city -->
+                                    <img class="img-fluid" src="{{ city['ImageURL'] }}" alt="Image for {{ city['city'] }}" style="width: 100%; height: 100%;">
+                                    <a class="destination-overlay text-white text-decoration-none" href="">
+                                        <h3 class="text-white">{{ city['city'] }}</h3>
+                                        {% if city['rating'] %}
+                                            <p class="text-white">Average Rating: {{ city['rating'] }}</p>
+                                        {% else %}
+                                            <p class="text-white">Rating not available</p>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No top cities available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        
+        <!-- Recommended Cities End -->
+
+
+
+
+    </body>
+</html>

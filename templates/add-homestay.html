@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <title>PMD | HOME</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Free HTML Templates" name="keywords">
+        <meta content="Free HTML Templates" name="description">
+    
+        <!-- Favicon -->
+        <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
+    
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+    
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    
+        <!-- Libraries Stylesheet -->
+        <link href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
+    
+        <!-- Customized Bootstrap Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+       <style> 
+                #homestayFormContainer {
+                    z-index: 9999; /* Adjust the z-index to be higher than other elements */
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: #fff;
+                    padding-right: 50px;
+                    box-shadow: none;
+                    max-width: 700px;
+                    width: 100%;
+                    
+                }
+               
+                /* Style for form labels */
+                label {
+                    font-weight: bold;
+                }
+
+                /* Style for form controls */
+                .form-control {
+                    height: 47px;
+                }
+
+                /* Style for the submit button */
+                .btn-primary {
+                    margin-top: 10px; /* Adjust the top margin as needed */
+                }
+
+
+                /* CSS for the cross button */
+                .close-button {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    margin-bottom:40px;
+                    font-size: 24px;
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    z-index: 1; /* Ensure the button is above the form content */
+                }
+
+                
+       </style> 
+    </head>
+    
+    <body>
+
+        <!-- Flash message box -->
+        <div class="col-lg-12" style="height: 0px;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages%}
+            <div id="flash-message" class="alert alert-info text-center slide-in">
+                {% for message in messages %}
+                <h3>{{ message }}</h3>
+                {% endfor %}
+             
+            </div>
+            <script>
+                // JavaScript to hide the flash message after 3 seconds
+                document.addEventListener('DOMContentLoaded', () => {
+                    const flashMessage = document.getElementById('flash-message');
+                    const contentContainer = document.getElementById('content-container');
+                    if (flashMessage) {
+                        setTimeout(() => {
+                            flashMessage.classList.remove('slide-in');
+                            flashMessage.classList.add('slide-out');
+                            contentContainer.style.transform = 'translateY(0)';
+                            contentContainer.style.height = 'auto'; // Reset the height
+                        }, 5000); // Hide after 3 seconds (3000 milliseconds)
+                        const flashMessageHeight = flashMessage.clientHeight;
+                        contentContainer.style.transform = 'translateY(' + flashMessageHeight + 'px)';
+                        contentContainer.style.height = 'calc(100% - ' + flashMessageHeight + 'px)';
+                    }
+                });
+            </script>
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <div id="content-container"> 
+
+        <!-- Topbar Start -->
+        <div class="container-fluid bg-light pt-3 d-none d-lg-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center">
+                        <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                        <p class="text-body px-3">|</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center text-lg-right">
+                    <div class="d-inline-flex align-items-center">
+                        {% if username %}
+                        <!-- Display username when user is logged in -->
+                        <p class="text-primary px-3 mt-3">{{ username }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="d-inline-flex align-items-center">
+                        <a class="text-primary px-3" href="">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="text-primary px-3" href="">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a class="text-primary px-3" href="">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a class="text-primary px-3" href="">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="text-primary pl-3" href="">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- Topbar End -->
+        
+        <!-- Navbar Start -->
+        <div class="container-fluid position-relative nav-bar p-0">
+            <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
+                <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
+                    <a href="" class="navbar-brand">
+                        <h1 class="m-0 text-primary"><span class="text-dark">PADHARO MHARE </span>DESH</h1>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                        <div class="navbar-nav ml-auto py-0">
+                           <a href="/add-home" class="text-primary px-3 mt-2">Home</a>
+                
+                    <div class="col-lg-6 text-center text-lg-right">
+                        <div class="d-inline-flex align-items-center">
+                        
+
+                            <!-- Add links to social media profiles here -->
+                        </div>
+                    </div>
+
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- Navbar End -->
+   
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                   <div style="text-align: center; justify-content: center;">
+                    <button id="addButton" class="btn btn-primary" style="margin-top: 20px; text-align: center; justify-content: center;">ADD</button>
+                   </div>
+
+                    <style>
+                        .testimonial-text {
+                            background-color: #f8f9fa;
+                            border-radius: 10px;
+                            padding: 20px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                    
+                        .testimonial-text h5 {
+                            color: #333;
+                            font-size: 1.3rem;
+                            margin-top: 15px;
+                        }
+                    
+                        .testimonial-text p {
+                            color: #555;
+                            margin-top: 10px;
+                        }
+                    
+                        .img-fluid{
+                            border-radius:10%;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            margin-bottom: 20px;
+                            transition: transform 0.3s ease; /* Add the scaling transition */
+                        }
+                    
+                        .img-fluid:hover {
+                            transform: scale(1.5); /* Scale up when hovering */
+                        }
+                    
+                        .testimonial-text:hover {
+                            transform: scale(1.05);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                        }
+                    </style>
+
+                    <div id="homestayDetails" class="row" style="margin-top:20px;">
+                        {% for homestay in homestays %}
+                        {% if homestay.user_id == session.user_id %}
+                        <div class="col-md-4 mt-3">
+                            <div class="text-center">
+                                <img class="img-fluid mx-auto" src="{{ homestay.photo_url }}" style="width: 170px; height: 150px;">
+                                <div class="testimonial-text bg-white p-1 mt-n5">
+                                    <h5 class="mt-5">{{ homestay.name }}</h5>
+                                    <p class="mt-1">Email: {{ homestay.email }}</p>
+                                    <p class="mt-1">Phone: {{ homestay.phone }}</p>
+                                    <p class="mt-1">Rooms: {{ homestay.rooms }}</p>
+                                    <p class="mt-1">Beds: {{ homestay.beds }}</p>
+                                    <p class="mt-1">Location: {{ homestay.location }}</p>                                
+                                            <form action="/delete-homestay" method="POST">
+                                                <input type="hidden" name="homestay_id" value="{{ homestay.id }}">
+                                                <button type="submit" class="btn btn-danger mt-3">Delete</button>
+                                            </form>
+                                    </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-md-4 mt-3">
+                            <div class="text-center">
+                                <img class="img-fluid mx-auto" src="{{ homestay.photo_url }}" style="width: 170px; height: 150px;">
+                                <div class="testimonial-text bg-white p-1 mt-n5">
+                                    <h5 class="mt-5">{{ homestay.name }}</h5>
+                                    <p class="mt-1">Email: {{ homestay.email }}</p>
+                                    <p class="mt-1">Phone: {{ homestay.phone }}</p>
+                                    <p class="mt-1">Rooms: {{ homestay.rooms }}</p>
+                                    <p class="mt-1">Beds: {{ homestay.beds }}</p>
+                                    <p class="mt-1">Location: {{ homestay.location }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                
+                    <div id="homestayFormContainer" class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5" style="margin-top:60px;">
+                        <div id="addHomestayForm" style="display: none; width: 100%;">
+                            <button class="close-button" id="closeButton">X</button>
+                            <h2 style="text-align: center;">Add a Homestay</h2>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form id="homestayForm" action="/submit-homestay" method="post" enctype="multipart/form-data">
+
+                                        <div style="width: 100%;">
+                                            <label for="name">Name:</label><br>
+                                            <input type="text" id="name" name="name" class="form-control" style="width: 100%;" required><br>
+        
+                                            <label for="email">Email:</label><br>
+                                            <input type="email" id="email" name="email" class="form-control" style="width: 100%;" required><br>
+        
+                                            <label for="phone">Phone Number:</label><br>
+                                            <input type="tel" id="phone" name="phone" class="form-control" style="width: 100%;" required><br>
+        
+                                            <label for="rooms">Number of Rooms:</label><br>
+                                            <input type="number" id="rooms" name="rooms" class="form-control" style="width: 100%;" required><br>
+        
+                                           
+                                        </div>
+                                </div>
+        
+                                <div class="col-md-6">
+                                    <div style="width: 100%;">
+                                        <label for="beds">Number of Beds Available:</label><br>
+                                        <input type="number" id="beds" name="beds" class="form-control" style="width: 100%;" required><br>
+        
+                                        <label for="location">Location:</label><br>
+                                        <input type="text" id="location" name="location" class="form-control" style="width: 100%;" required><br>
+        
+                                        <label for="idProof">ID Proof:</label><br>
+                                        <input type="file" id="idProof" name="idProof" accept="image/*" class="form-control" style="width: 100%;" required><br>
+        
+                                        <label for="photo">Photo of homestay:</label><br>
+                                        <input type="file" id="photo" name="photo" accept="image/*" class="form-control" style="width: 100%;" required><br>                                      
+                                    </div>  
+                                </div>
+                            </div>
+                                <div style="display:flex; text-align: center; justify-content: center;">
+                                    <button type="submit-homestay" class="btn btn-primary m-3">Submit</button>
+                                    <button type="reset-homestay" id="resetButton" class="btn btn-primary m-3">Reset</button>
+                                </div>
+                           
+                            </form>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+        </div>
+        
+
+        </div>
+        
+        <script>
+            // JavaScript to handle the form display
+            document.getElementById('addButton').addEventListener('click', function() {
+            document.getElementById('addHomestayForm').style.display = 'block';
+            });
+
+            // Function to close the form on button click
+            document.getElementById('closeButton').addEventListener('click', function() {
+            document.getElementById('addHomestayForm').style.display = 'none';
+            });
+
+            // Function to handle the reset button
+            document.getElementById('resetButton').addEventListener('click', function() {
+            document.getElementById('homestayForm').reset();
+            });
+
+
+
+
+            // JavaScript to hide the flash message
+            function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            const contentContainer = document.getElementById('content-container');
+            if (flashMessage) {
+            flashMessage.classList.remove('slide-in');
+            flashMessage.classList.add('slide-out');
+            contentContainer.style.transform = 'translateY(0)';
+            contentContainer.style.height = 'auto'; // Reset the height
+            }
+            }
+
+            // Function to check if flash message is present and hide it after 3 seconds
+            function checkAndHideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+            setTimeout(hideFlashMessage, 3000); // Hide after 3 seconds (3000 milliseconds)
+            const flashMessageHeight = flashMessage.clientHeight;
+            const contentContainer = document.getElementById('content-container');
+            contentContainer.style.transform = 'translateY(' + flashMessageHeight + 'px)';
+            contentContainer.style.height = 'calc(100% - ' + flashMessageHeight + 'px)';
+            }
+            }
+
+            document.addEventListener('DOMContentLoaded', checkAndHideFlashMessage);
+        </script>
+       
+        <script>
+            
+            // Function to hide the flash message, fetch updated details, and redirect to add-homestay.html
+            function hideFlashMessageAndRedirect() {
+            const flashMessage = document.getElementById('flash-message');
+            const contentContainer = document.getElementById('content-container');
+            if (flashMessage) {
+            setTimeout(() => {
+            flashMessage.classList.remove('slide-in');
+            flashMessage.classList.add('slide-out');
+            contentContainer.style.transform = 'translateY(0)';
+            contentContainer.style.height = 'auto'; // Reset the height
+            
+            setTimeout(() => {
+            window.location.href = '/add-homestay'; // Redirect to add-homestay.html after a short delay
+            }, 100); // Redirect after 0.5 seconds (500 milliseconds)
+            }, 3000); // Hide after 5 seconds (5000 milliseconds)
+            const flashMessageHeight = flashMessage.clientHeight;
+            contentContainer.style.transform = `translateY(${flashMessageHeight}px)`;
+            contentContainer.style.height = `calc(100% - ${flashMessageHeight}px)`;
+            } 
+            }
+
+            document.addEventListener('DOMContentLoaded', hideFlashMessageAndRedirect);
+        </script>
+
+    </body>
+
+</html>
